@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(uuid())
+  name         String
+  email        String        @unique
+  password     String
+  profilePic   String?
+  bio          String?
+  createdAt    DateTime      @default(now())
+  memberships  GroupMember[]
+  messages     Message[]
+  messageReads MessageRead[]
+  sentInvites  GroupInvite[] @relation("Sender")
+  invites      GroupInvite[] @relation("Receiver")
+  notes        Note[]
+  expenses     Expense[]
+}
+
+model Group {
+  id           String        @id @default(uuid())
+  name         String
+  description  String?
+  targetBudget String?
+  maxMembers   Int?
+  days         Int?
+  isPublic     Boolean       @default(false)
+  isArchived   Boolean       @default(false)
+  isStarted    Boolean       @default(false)
+  createdAt    DateTime      @default(now())
+  members     GroupMember[]
+  messages    Message[]
+  tripState   TripState?
+  invites     GroupInvite[]
+  notes       Note[]
+  expenses    Expense[]
+}
+
+model GroupInvite {
+  id         String   @id @default(uuid())
+  groupId    String
+  senderId   String
+  receiverId String
+  status     String   @default("pending") // "pending", "accepted", "rejected"
+  createdAt  DateTime @default(now())
+  group      Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  sender     User     @relation("Sender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver   User     @relation("Receiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, receiverId])
+}
+
+model GroupMember {
+  id       String @id @default(uuid())
+  userId   String
+  groupId  String
+  role     String @default("member") // "admin", "member"
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group    Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, groupId])
+}
+
+model Message {
+  id        String        @id @default(uuid())
+  groupId   String
+  senderId  String?       
+  content   String
+  type      String        @default("text") // "text", "ai", "system"
+  createdAt DateTime      @default(now())
+  group     Group         @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  sender    User?         @relation(fields: [senderId], references: [id], onDelete: SetNull)
+  reads     MessageRead[]
+}
+
+model MessageRead {
+  id        String   @id @default(uuid())
+  messageId String
+  userId    String
+  readAt    DateTime @default(now())
+  message   Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId])
+}
+
+model TripState {
+  id          String   @id @default(uuid())
+  groupId     String   @unique
+  destination String?
+  dates       String?
+  budget      String?
+  preferences Json?
+  itinerary   Json?    
+  lastUpdated DateTime @default(now()) @updatedAt
+  group       Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+}
+
+model Note {
+  id        String   @id @default(uuid())
+  groupId   String
+  authorId  String
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  groupId     String
+  paidById    String
+  title       String
+  amount      Float
+  createdAt   DateTime @default(now())
+  
+  group       Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  paidBy      User     @relation(fields: [paidById], references: [id], onDelete: Cascade)
+}
