@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     await redis.lpush(`queue:ai:${groupId}`, JSON.stringify(data));
 
     // Simple Lock system to ensure only 1 worker processes per group at a time
-    const locked = await redis.set(`lock:ai:${groupId}`, "1", "EX", 30, "NX");
+    const locked = await (redis as any).set(`lock:ai:${groupId}`, "1", { ex: 30, nx: true });
     if (!locked) {
       return NextResponse.json({ queued: true });
     }
