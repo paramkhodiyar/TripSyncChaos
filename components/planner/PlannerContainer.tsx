@@ -137,7 +137,7 @@ export function PlannerContainer({ groupId, initialTripState, initialNotes = [],
 
   return (
     <div className="flex flex-col h-full bg-white">
-      <div className="flex border-b border-slate-100 px-8 pt-6 gap-6 shrink-0">
+      <div className="flex border-b border-slate-100 px-4 sm:px-8 pt-6 gap-4 sm:gap-6 shrink-0 overflow-x-auto no-scrollbar scroll-smooth">
         <button 
           onClick={() => setActiveTab("plan")}
           className={`pb-4 font-semibold text-sm transition-colors relative ${activeTab === "plan" ? "text-slate-900" : "text-slate-400 hover:text-slate-600"}`}

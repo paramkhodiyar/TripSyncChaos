@@ -1,14 +1,12 @@
-import { ChatContainer } from "@/components/chat/ChatContainer";
-import { PlannerContainer } from "@/components/planner/PlannerContainer";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { prisma } from "@/lib/db";
 import { auth } from "@/auth";
 import { InviteMemberButton } from "@/components/InviteMemberButton";
 import { EditTripModal } from "@/components/planner/EditTripModal";
+import { GroupClientLayout } from "./GroupClientLayout";
 
 export default async function GroupPage({ params }: { params: { id: string } }) {
-  // await params before using its properties in Next.js 15+ App Router
   const session = await auth();
   if (!session?.user?.id) return null;
 
@@ -40,19 +38,23 @@ export default async function GroupPage({ params }: { params: { id: string } }) 
     dates: group.tripState?.dates,
     budget: group.tripState?.budget,
     maxMembers: group.maxMembers,
-    isArchived: group.isArchived
+    isArchived: group.isArchived,
+    isStarted: group.isStarted
   };
 
   return (
     <div className="flex flex-col h-screen w-full bg-white overflow-hidden font-sans">
-      <header className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white z-10">
-        <div className="flex items-center gap-4">
-          <Link href="/dashboard" className="p-2 -ml-2 text-slate-400 hover:bg-slate-50 rounded-full transition-colors">
+      <header className="flex flex-col sm:flex-row sm:items-center justify-between px-6 py-4 sm:py-6 border-b border-slate-100 bg-white z-20 gap-4">
+        <div className="flex items-center gap-3">
+          <Link href="/dashboard" className="p-2 -ml-2 text-slate-400 hover:bg-slate-50 rounded-full transition-all active:scale-90">
             <ChevronLeft size={20} />
           </Link>
-          <h1 className="font-bold text-slate-900 tracking-tight">{group.name}</h1>
+          <div className="flex flex-col">
+            <h1 className="font-bold text-slate-900 tracking-tight text-lg line-clamp-1">{group.name}</h1>
+            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{group.isPublic ? "Public Group" : "Private Session"}</p>
+          </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-1 sm:pb-0 scrollbar-hide">
           {!group.isArchived && (
             <>
               {isAdmin && <EditTripModal groupId={group.id} initialData={initialData} />}
@@ -60,37 +62,14 @@ export default async function GroupPage({ params }: { params: { id: string } }) 
             </>
           )}
           {group.isArchived && (
-            <span className="px-4 py-1.5 bg-slate-100 text-slate-500 rounded-full text-xs font-bold uppercase tracking-widest border border-slate-200">
+            <span className="px-4 py-1.5 bg-slate-100 text-slate-500 rounded-full text-xs font-bold uppercase tracking-widest border border-slate-200 shrink-0">
               Archived Trip
             </span>
           )}
         </div>
       </header>
-      <div className="flex flex-1 overflow-hidden">
-        {/* Left Panel: Chat */}
-        <div className="w-1/2 h-full border-r border-slate-100 flex flex-col">
-          <ChatContainer 
-            groupId={id} 
-            initialMessages={group.messages} 
-            currentUserId={session.user.id} 
-            currentUserName={session.user.name || "User"} 
-            isArchived={group.isArchived}
-          />
-        </div>
-
-        {/* Right Panel: AI Planner & Splits */}
-        <div className="w-1/2 h-full overflow-y-auto">
-          <PlannerContainer 
-            groupId={id} 
-            initialTripState={group.tripState} 
-            initialNotes={group.notes} 
-            initialExpenses={group.expenses}
-            members={group.members}
-            currentUserId={session.user.id}
-            isArchived={group.isArchived}
-          />
-        </div>
-      </div>
+      
+      <GroupClientLayout id={id} group={group} session={session} />
     </div>
   );
 }

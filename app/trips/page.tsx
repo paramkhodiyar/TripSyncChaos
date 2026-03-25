@@ -36,30 +36,30 @@ export default async function TripsPage({ searchParams }: { searchParams: { quer
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans">
-      <header className="bg-white border-b border-slate-100 py-4 px-6 flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <header className="bg-white border-b border-slate-100 py-4 px-4 sm:px-6 flex items-center justify-between">
+        <div className="flex items-center gap-2 sm:gap-4">
           <Link href="/" className="p-2 -ml-2 text-slate-400 hover:bg-slate-50 rounded-full transition-colors">
             <ChevronLeft size={20} />
           </Link>
           <div className="flex items-center gap-2">
-            <Plane className="text-slate-900" size={20} />
-            <span className="font-bold tracking-tight text-slate-900">Explore Trips</span>
+            <Plane className="text-slate-900 hidden xs:block" size={20} />
+            <span className="font-bold tracking-tight text-slate-900 text-sm sm:text-base">Explore Trips</span>
           </div>
         </div>
         {session ? (
-          <Link href="/dashboard" className="flex items-center gap-2 text-sm font-bold text-slate-700 bg-slate-100 px-4 py-2 rounded-full hover:bg-slate-200 hover:text-slate-900 transition-colors shadow-sm">
-            <LayoutDashboard size={16} /> Go to Dashboard
+          <Link href="/dashboard" className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 px-3 sm:px-4 py-2 rounded-full hover:bg-slate-200 transition-colors shadow-sm">
+            <LayoutDashboard size={14} className="sm:size-4" /> <span className="hidden sm:inline">Go to</span> Dashboard
           </Link>
         ) : (
-          <Link href="/login" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">Login to join</Link>
+          <Link href="/login" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">Login</Link>
         )}
       </header>
 
       <main className="max-w-6xl mx-auto p-6 py-10">
-        <div className="mb-8 border-b border-slate-200 pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="mb-8 border-b border-slate-200 pb-6 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <h1 className="text-4xl font-black text-slate-900 tracking-tight mb-2">Discover Public Trips</h1>
-            <p className="text-slate-500 text-lg">Browse curated group trips, or request to join community adventures.</p>
+            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mb-2">Discover Public Trips</h1>
+            <p className="text-slate-500 text-base sm:text-lg">Browse curated group trips, or request to join community adventures.</p>
           </div>
         </div>
 

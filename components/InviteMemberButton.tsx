@@ -46,21 +46,21 @@ export function InviteMemberButton({ groupId }: { groupId: string }) {
             <h2 className="text-xl font-bold text-slate-900 mb-2">Invite to Trip</h2>
             <p className="text-slate-500 text-sm mb-6">Enter a user's email address to send them an invite to this trip. Only admins can invite new members.</p>
             
-            <form onSubmit={handleInvite} className="flex gap-2">
+            <form onSubmit={handleInvite} className="flex flex-col sm:flex-row gap-3">
               <input 
                 type="email"
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="User's email address..."
-                className="flex-1 px-4 py-2 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:border-slate-900 outline-none text-slate-800"
+                className="flex-1 px-4 py-2 border border-slate-200 rounded-xl focus:ring-1 focus:ring-slate-900 focus:border-slate-900 outline-none text-slate-800 text-sm h-11"
               />
               <button 
                 type="submit" 
                 disabled={loading}
-                className="px-6 py-2 bg-slate-900 text-white rounded-xl font-medium hover:bg-slate-800 disabled:opacity-70 transition-colors"
+                className="px-6 py-2 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 disabled:opacity-70 transition-all active:scale-95 h-11 text-sm shrink-0 shadow-sm"
               >
-                {loading ? "Sending..." : "Send"}
+                {loading ? "Sending..." : "Send Invite"}
               </button>
             </form>
           </div>

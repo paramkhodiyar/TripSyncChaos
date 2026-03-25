@@ -49,23 +49,23 @@ export default function ConsultantPage() {
   return (
     <div className="flex flex-col h-screen bg-slate-50 font-sans overflow-hidden">
       {/* Navbar */}
-      <header className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <header className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+        <div className="flex items-center gap-2 sm:gap-4">
           <Link href="/dashboard" className="p-2 -ml-2 text-slate-400 hover:bg-slate-50 rounded-full transition-colors">
             <ChevronLeft size={20} />
           </Link>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white">
-              <Sparkles size={16} />
+            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white shrink-0">
+              <Sparkles size={14} className="sm:size-4" />
             </div>
-            <h1 className="font-bold text-slate-900 tracking-tight">AI Travel Consultant</h1>
+            <h1 className="font-bold text-slate-900 tracking-tight text-sm sm:text-base line-clamp-1">AI Consultant</h1>
           </div>
         </div>
         <Link 
           href="/dashboard/create" 
-          className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-full hover:bg-slate-800 shadow-lg shadow-slate-900/10 transition-all hover:scale-105 active:scale-95"
+          className="flex items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 bg-slate-900 text-white text-[10px] sm:text-sm font-bold rounded-full hover:bg-slate-800 shadow-lg transition-all active:scale-95 shrink-0"
         >
-          <Plus size={16} /> Create Trip
+          <Plus size={14} className="sm:size-4" /> <span className="hidden xs:inline">Create Trip</span><span className="xs:hidden">New</span>
         </Link>
       </header>
 

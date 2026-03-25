@@ -44,40 +44,41 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
             <span className="font-bold text-base tracking-tight">TripSync</span>
           </div>
 
-          <nav className="flex items-center gap-1">
+          <nav className="flex items-center gap-1 overflow-x-auto no-scrollbar py-2">
             <Link
               href="/trips"
-              className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors"
+              className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-2 sm:px-3 py-1.5 rounded-lg transition-colors shrink-0"
             >
               <Compass size={15} />
-              Explore
+              <span className="hidden xs:inline">Explore</span>
             </Link>
             <Link
               href="/consultant"
-              className="flex items-center gap-1.5 text-sm font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-3 py-1.5 rounded-lg transition-all hover:bg-indigo-100 shadow-sm mx-1"
+              className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2 sm:px-3 py-1.5 rounded-lg transition-all hover:bg-indigo-100 shadow-sm mx-1 shrink-0"
             >
               <Sparkles size={15} />
-              AI Helper
+              <span className="hidden xs:inline">AI Helper</span>
             </Link>
             <Link
               href="/profile"
-              className="flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 px-3 py-1.5 rounded-lg transition-colors"
+              className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 px-2 sm:px-3 py-1.5 rounded-lg transition-colors shrink-0"
             >
               <User size={15} />
-              Profile
+              <span className="hidden xs:inline">Profile</span>
             </Link>
             <form
               action={async () => {
                 "use server";
                 await signOut({ redirectTo: "/" });
               }}
+              className="shrink-0"
             >
               <button
                 type="submit"
-                className="flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors"
+                className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-slate-500 hover:text-red-600 hover:bg-red-50 px-2 sm:px-3 py-1.5 rounded-lg transition-colors"
               >
                 <LogOut size={15} />
-                Logout
+                <span className="hidden xs:inline">Logout</span>
               </button>
             </form>
           </nav>
