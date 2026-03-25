@@ -5,7 +5,7 @@ import Groq from "groq-sdk";
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-const SYSTEM_PROMPT = `You are "AI Planner" for TripSync Chaos. 
+const SYSTEM_PROMPT = `You are "TripWise AI". 
 You structure chaotic group chats into a JSON trip itinerary. 
 You will receive the CURRENT TRIP STATE and RECENT CHAT MESSAGES. 
 You MUST respond EXCLUSIVELY with a JSON object. No markdown wrapping.

@@ -4,8 +4,8 @@ import { Providers } from './providers'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'TripSync Chaos',
-  description: 'Collaborative group travel planning system',
+  title: 'TripWise',
+  description: 'The ultimate intelligent collaborative travel planning system',
 }
 
 export default function RootLayout({

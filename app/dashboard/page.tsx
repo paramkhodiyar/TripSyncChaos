@@ -10,7 +10,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
 
-  const [activeGroups, archivedGroups, pendingInvites] = await Promise.all([
+  const [activeGroups, archivedGroups, pendingInvites, userData] = await Promise.all([
     prisma.groupMember.findMany({
       where: { userId: session.user.id, group: { isArchived: false } },
       include: {
@@ -28,6 +28,10 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
     prisma.groupInvite.findMany({
       where: { receiverId: session.user.id, status: "pending" },
       include: { group: true, sender: true }
+    }),
+    prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { profilePic: true }
     })
   ]);
 
@@ -41,7 +45,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
         <div className="max-w-5xl mx-auto h-14 flex items-center justify-between">
           <div className="flex items-center gap-2 text-slate-800">
             <Plane size={18} className="text-blue-600" />
-            <span className="font-bold text-base tracking-tight">TripSync</span>
+            <span className="font-bold text-base tracking-tight">TripWise</span>
           </div>
 
           <nav className="flex items-center gap-1 overflow-x-auto no-scrollbar py-2">
@@ -63,7 +67,13 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
               href="/profile"
               className="flex items-center gap-1.5 text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 px-2 sm:px-3 py-1.5 rounded-lg transition-colors shrink-0"
             >
-              <User size={15} />
+              <div className="w-5 h-5 rounded-full overflow-hidden bg-slate-100 flex items-center justify-center shrink-0 border border-slate-200">
+                {userData?.profilePic ? (
+                  <img src={userData.profilePic} alt="Me" className="w-full h-full object-cover" />
+                ) : (
+                  <User size={12} />
+                )}
+              </div>
               <span className="hidden xs:inline">Profile</span>
             </Link>
             <form

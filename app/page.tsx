@@ -9,7 +9,7 @@ export default async function LandingPage() {
       <header className="py-6 px-8 flex justify-between items-center bg-white border-b border-slate-100">
         <div className="flex items-center gap-2">
           <Plane className="text-slate-900" size={24} />
-          <span className="font-bold text-xl tracking-tight text-slate-900">TripSync Chaos.</span>
+          <span className="font-bold text-xl tracking-tight text-slate-900">TripWise.</span>
         </div>
         <div className="flex gap-4">
           <Link href="/login" className="px-5 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">Log in</Link>

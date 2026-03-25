@@ -131,7 +131,7 @@ export default function ConsultantPage() {
               <Send size={18} />
             </button>
           </form>
-          <p className="text-center text-[10px] sm:text-xs text-slate-400 mt-4 uppercase tracking-widest font-bold">TripSync AI Travel Expert • 24/7 Consultation</p>
+          <p className="text-center text-[10px] sm:text-xs text-slate-400 mt-4 uppercase tracking-widest font-bold">TripWise AI Travel Expert • 24/7 Consultation</p>
         </div>
       </div>
       
