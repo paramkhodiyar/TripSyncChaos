@@ -11,7 +11,9 @@ export default async function GroupPage({ params }: { params: { id: string } }) 
   if (!session?.user?.id) return null;
 
   const { id } = await params;
-  
+
+
+
   const group = await prisma.group.findUnique({
     where: { id },
     include: {
@@ -68,7 +70,7 @@ export default async function GroupPage({ params }: { params: { id: string } }) 
           )}
         </div>
       </header>
-      
+
       <GroupClientLayout id={id} group={group} session={session} />
     </div>
   );
