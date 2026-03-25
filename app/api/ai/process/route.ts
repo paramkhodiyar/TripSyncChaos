@@ -72,7 +72,8 @@ async function processQueue(groupId: string) {
       const item = await redis.rpop(`queue:ai:${groupId}`);
       if (!item) break; // queue empty
 
-      const promptData = JSON.parse(item);
+      // Upstash Redis automatically parses JSON, so we check if it's already an object
+      const promptData = typeof item === "string" ? JSON.parse(item) : item;
 
       // Fetch Context
       const group = await prisma.group.findUnique({
