@@ -6,7 +6,7 @@ import { Send, Bot } from "lucide-react";
 export function ChatContainer({ groupId, initialMessages = [], currentUserId, currentUserName, isArchived = false }: { groupId: string, initialMessages?: any[], currentUserId: string, currentUserName: string, isArchived?: boolean }) {
   const [messages, setMessages] = useState<any[]>(initialMessages);
   const [input, setInput] = useState("");
-  const [typingUsers, setTypingUsers] = useState<{userId: string, userName: string}[]>([]);
+  const [typingUsers, setTypingUsers] = useState<{ userId: string, userName: string }[]>([]);
   const socketRef = useRef<Socket | null>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -52,12 +52,12 @@ export function ChatContainer({ groupId, initialMessages = [], currentUserId, cu
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
-    
+
     if (socketRef.current) {
       socketRef.current.emit("typing_start", { groupId, userId: currentUserId, userName: currentUserName });
-      
+
       if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-      
+
       typingTimeoutRef.current = setTimeout(() => {
         socketRef.current?.emit("typing_stop", { groupId, userId: currentUserId });
       }, 1500);
@@ -80,7 +80,7 @@ export function ChatContainer({ groupId, initialMessages = [], currentUserId, cu
     socketRef.current?.emit("send_message", newMsg);
     socketRef.current?.emit("typing_stop", { groupId, userId: currentUserId });
     if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-    
+
     setInput("");
   };
 
@@ -108,31 +108,31 @@ export function ChatContainer({ groupId, initialMessages = [], currentUserId, cu
         {typingUsers.length > 0 && (
           <div className="absolute -top-8 left-4 text-[10px] font-bold text-slate-400 bg-white px-3 py-1.5 rounded-full shadow-sm border border-slate-100 uppercase tracking-widest flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-200">
             <span className="flex gap-1">
-               <span className="w-1.5 h-1.5 bg-indigo-300 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-               <span className="w-1.5 h-1.5 bg-indigo-300 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-               <span className="w-1.5 h-1.5 bg-indigo-300 rounded-full animate-bounce"></span>
+              <span className="w-1.5 h-1.5 bg-indigo-300 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+              <span className="w-1.5 h-1.5 bg-indigo-300 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+              <span className="w-1.5 h-1.5 bg-indigo-300 rounded-full animate-bounce"></span>
             </span>
             <span className="text-slate-500">{typingUsers.map(u => u.userName.split(' ')[0]).join(", ")} {typingUsers.length === 1 ? "is typing" : "are typing"}</span>
           </div>
-         )}
+        )}
         <form onSubmit={sendMessage} className="flex gap-2 relative">
-          <input 
-            type="text" 
+          <input
+            type="text"
             value={input}
             onChange={handleInputChange}
             disabled={isArchived}
             className="flex-1 border border-slate-200 rounded-full px-4 py-2 focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition-all font-medium text-[15px] text-slate-800 disabled:bg-slate-100 disabled:cursor-not-allowed"
             placeholder={isArchived ? "Trip archived • Read only" : "Type a message or ask @ai..."}
           />
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             disabled={isArchived || !input.trim()}
             className="bg-slate-900 text-white p-2 rounded-full hover:bg-slate-800 transition-colors h-10 w-10 flex items-center justify-center disabled:opacity-50"
           >
             <Send size={18} />
           </button>
         </form>
-          <p className="text-xs text-gray-500 mt-2">*AI responses may be factually inaccurate.*</p>
+        <p className="text-xs text-gray-500 mt-2 text-center">*AI responses may be factually inaccurate.*</p>
       </div>
     </div>
   );
