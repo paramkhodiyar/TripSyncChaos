@@ -90,19 +90,25 @@ app.prepare().then(() => {
       try {
         if (data.senderId === "ai-system") return;
 
-        // ✅ Save message
-        await fetch(`${BASE_URL}/api/messages`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
-
-        // ✅ AI trigger
-        if (
-          data.type === "ai_prompt" ||
-          data.content?.toLowerCase().includes("@ai")
-        ) {
-          console.log(`🤖 Triggering AI for group ${data.groupId} via ${BASE_URL}...`);
+      // 1. Try to Save message (Don't let this block AI trigger)
+      try {
+        if (data.senderId !== "ai-system") {
+           fetch(`${BASE_URL}/api/messages`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          }).catch(err => console.error("❌ DB save fetch failed:", err.message));
+        }
+      } catch (err) {
+        console.error("❌ DB save error:", err.message);
+      }
+      
+      // 2. AI trigger
+      if (
+        (data.type === "ai_prompt" || data.content?.toLowerCase().includes("@ai")) &&
+        data.senderId !== "ai-system"
+      ) {
+          console.log(`🤖 AI Trigger: Attempting to call ${BASE_URL}/api/ai/process...`);
           fetch(`${BASE_URL}/api/ai/process`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -111,13 +117,13 @@ app.prepare().then(() => {
             .then(async (res) => {
               if (!res.ok) {
                 const text = await res.text();
-                console.error(`❌ AI Error (${res.status}):`, text);
+                console.error(`❌ AI API Error (${res.status}):`, text);
               } else {
-                console.log("🤖 AI API responded successfully (queued)");
+                console.log("🤖 AI API triggered successfully (queued on Vercel)");
               }
             })
-            .catch(err => console.error("❌ AI fetch failed completely:", err));
-        }
+            .catch(err => console.error("❌ AI trigger network failure:", err.message));
+      }
 
       } catch (e) {
         console.error("❌ Message processing failed:", e);
